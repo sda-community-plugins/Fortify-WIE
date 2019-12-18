@@ -11,6 +11,8 @@ wieClient.setSSL()
 wieClient.setDebug(true)
 wieClient.login()
 
+println wieClient.scanResultsJson("3e86abf4-a9cd-4e58-9349-0f900d113588")
+System.exit(0)
 //println wieClient.getStatusJson()
 //println wieClient.getSecurityGroupsJson()
 //println wieClient.getSecurityGroupByIdJson("8dc3fa89-9be0-4a8c-98d7-e88c836a17b5")
@@ -31,6 +33,9 @@ wieClient.login()
 //println wieClient.getSensorByIdJson("a03836b2-a2cd-4d7a-b443-557651a0fdd7")
 //println wieClient.getSensorByNameJson("wins2016srg-WebInspect")
 //println wieClient.getSensorIdByName("wins2016srg-WebInspect")
+//println wieClient.getScanTemplatesJson()
+//println wieClient.getScanTemplateByIdJson("c88e5487-926f-4729-bfa0-6265708dce3b")
+//println wieClient.getScanTemplateNameById("c88e5487-926f-4729-bfa0-6265708dce3b")
 
 def scanSiteId = wieClient.getProjectVersionSiteId("Java Web App", "1.0")
 def scanSensorId = wieClient.getSensorIdByName("wins2016srg-WebInspect")
@@ -41,10 +46,10 @@ def scanPolicyId = wieClient.getPolicyIdByName("Standard")
 def scanPriority = 2
 
 String scanId = wieClient.createScanFromUrl("Test Scan from URL", scanSiteId, scanPolicyId, scanSensorId, scanUrl, scanPriority)
-//String scanId = wieClient.createScanFromTemplate("Test Scan from Template", scanSiteId, scanSensorId, scanTemplateId, scanPriority)
+//String scanId = wieClient.createScanFromTemplate("Test Scan from Template", scanSiteId, scanPolicyId, scanSensorId, scanTemplateId, scanPriority)
 //def scanSettingsFileId = wieClient.uploadFile("wisettings.xml", new File("C:\\Temp\\wisettings.xml"), wieClient.SCAN_SETTINGS_XML)
 //println "Uploaded wiSettings as id: ${scanSettingsFileId}"
-//String scanId = wieClient.createScanFromSettingsFile("Test Scan from Settings File", scanSiteId, scanSensorId, scanSettingsFileId, scanPolicyId, scanPriority)
+//String scanId = wieClient.createScanFromSettingsFile("Test Scan from Settings File", scanSiteId, scanPolicyId, scanSensorId, scanSettingsFileId, scanPriority)
 println "Scan id is ${scanId}"
 String scanStatus = wieClient.scanStatus(scanId)
 while (scanStatus.equals("Pending") || scanStatus.equals("Starting") || scanStatus.equals("Running") || scanStatus.equals("Importing")) {

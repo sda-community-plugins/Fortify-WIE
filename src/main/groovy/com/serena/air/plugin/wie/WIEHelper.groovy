@@ -301,6 +301,50 @@ class WIEHelper extends HttpBaseClient {
         }
     }
 
+    // Scan Templates
+
+    /*
+     * Get all WIE scan templates as parseable JSON response
+     */
+    def getScanTemplatesJson() {
+        HttpResponse response = execGet("/api/v2/scanTemplates", null)
+        checkStatusCode(response.code)
+        if (response.code != HttpStatus.SC_OK) {
+            throw new StepFailedException("Unable to retrieve scan templates")
+        }
+        return new JsonSlurper().parseText(response.body)
+    }
+
+    /*
+     * Get a specific WIE scan template as parseable JSON response
+     */
+    def getScanTemplateByIdJson(String templateId) {
+        HttpResponse response = execGet("/api/v2/scanTemplates/${templateId}", null)
+        checkStatusCode(response.code)
+        if (response.code != HttpStatus.SC_OK) {
+            throw new StepFailedException("Unable to retrieve scan template \"${templateId}\"")
+        }
+        return new JsonSlurper().parseText(response.body)
+    }
+
+    /*
+     * Get the name of a WIE scan template by its id
+     */
+    def getScanTemplateNameById(String templateId) {
+        HttpResponse response = execGet("/api/v2/scanTemplates/${templateId}", null)
+        checkStatusCode(response.code)
+        if (response.code != HttpStatus.SC_OK) {
+            throw new StepFailedException("Unable to retrieve scan template \"${templateId}\"")
+        }
+        def scanTemplate = new JsonSlurper().parseText(response.body)
+        if (scanTemplate) {
+            return scanTemplate?.data?.name
+        } else {
+            throw new StepFailedException("Could not find scan template \"${templateId}\" in project \"${projectName}\"")
+        }
+    }
+
+
     // Sensors
 
     /*
@@ -407,7 +451,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Create a new simple scan from a template
      */
-    def createScanFromTemplate(String scanName, String scanSiteId, String scanSensorId, String scanTemplId, String scanPolicyId, int scanPriority) {
+    def createScanFromTemplate(String scanName, String scanSiteId, String scanPolicyId, String scanSensorId, String scanTemplId, int scanPriority) {
         def url = "/api/v2/scans"
 
         JsonBuilder projectVersionJson = new JsonBuilder()
@@ -446,7 +490,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Create a new simple scan from an uploaded settings file
      */
-    def createScanFromSettingsFile(String scanName, String scanSiteId, String scanSensorId, String scanSettingsFileId, String scanPolicyId, int scanPriority) {
+    def createScanFromSettingsFile(String scanName, String scanSiteId, String scanPolicyId, String scanSensorId, String scanSettingsFileId, int scanPriority) {
         def url = "/api/v2/scans"
 
         JsonBuilder projectVersionJson = new JsonBuilder()

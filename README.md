@@ -1,15 +1,17 @@
 # Micro Focus Fortify WebInspect Enterprise plugin
 
-The _Micro Focus Fortify WebInspect Enteprise_ plugin allows you to execute web application security testing as part of 
-a Deployment Automation workflow.
+The _Micro Focus Fortify WebInspect Enteprise_ plugin allows you to execute dynamic application security 
+testing as part of a Deployment Automation workflow.
 
 This plugin is a work in progress but it is intended to provide the following steps:
 
 * [x] **Create Scan from URL** - Create a new simple scan from a URL
 * [x] **Create Scan from Template** - Create a new simple scan from a template
 * [x] **Create Scan from Settings File** - Create a new simple scan from an uploaded settings file
+* [x] **Get Scan Status** - Gets the status of a previously initiated scan
+* [x] **Create Scan Report** - Create a HTML report of a previously initiated scan.  
 
-Note: this plugin is deisgned to be used when WebInspect Enterprise has been integrated with Software Security
+Note: this plugin is designed to be used when WebInspect Enterprise has been integrated with Software Security
 Center
 ### Installing the plugin
  
