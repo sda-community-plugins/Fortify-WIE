@@ -17,6 +17,7 @@ wieClient.login()
 //println wieClient.getSecurityGroupByNameJson("Default Group")
 //println wieClient.getPoliciesJson()
 //println wieClient.getPolicyByIdJson("08cd4862-6334-4b0e-abf5-cb7685d0cde7")
+//println wieClient.getPolicyIdByName("Standard")
 //println wieClient.getPolicyByNameJson("All Checks")
 //println wieClient.getProjectsJson()
 //println wieClient.getProjectByIdJson("3")
@@ -24,25 +25,26 @@ wieClient.login()
 //println wieClient.getProjectVersionsJson()
 //println wieClient.getProjectVersionByIdJson("10003")
 //println wieClient.getProjectVersionByNameJson("1.0")
+//println wieClient.getProjectVersionSiteId("Java Web App", "1.0")
 //println wieClient.getProjectVersionByProjectAndNameJson("Java Web App", "2.0")
 //println wieClient.getSensorsJson()
 //println wieClient.getSensorByIdJson("a03836b2-a2cd-4d7a-b443-557651a0fdd7")
 //println wieClient.getSensorByNameJson("wins2016srg-WebInspect")
+//println wieClient.getSensorIdByName("wins2016srg-WebInspect")
 
-
-def scanSiteId = "b40ba98b-972f-4efc-ad8c-0b1e6769588d"
-def scanSensorId = "a03836b2-a2cd-4d7a-b443-557651a0fdd7"
+def scanSiteId = wieClient.getProjectVersionSiteId("Java Web App", "1.0")
+def scanSensorId = wieClient.getSensorIdByName("wins2016srg-WebInspect")
 def scanUrl = "http://wins2016srg:8091/java-web-app/"
 def scanTemplateId = "c88e5487-926f-4729-bfa0-6265708dce3b"
 def wieConsoleUrl = "${wieServerUrl}/WebConsole/ApplicationDetails.aspx?SiteID=${scanSiteId}"
-def scanPolicyId = "08cd4862-6334-4b0e-abf5-cb7685d0cde7"
+def scanPolicyId = wieClient.getPolicyIdByName("Standard")
 def scanPriority = 2
 
-//String scanId = wieClient.createScanFromUrl("Test Scan from URL", scanSiteId, scanSensorId, scanUrl, scanPriority)
+String scanId = wieClient.createScanFromUrl("Test Scan from URL", scanSiteId, scanPolicyId, scanSensorId, scanUrl, scanPriority)
 //String scanId = wieClient.createScanFromTemplate("Test Scan from Template", scanSiteId, scanSensorId, scanTemplateId, scanPriority)
-def scanSettingsFileId = wieClient.uploadFile("wisettings.xml", new File("C:\\Temp\\wisettings.xml"), wieClient.SCAN_SETTINGS_XML)
-println "Uploaded wiSettings as id: ${scanSettingsFileId}"
-String scanId = wieClient.createScanFromSettingsFile("Test Scan from Settings File", scanSiteId, scanSensorId, scanSettingsFileId, scanPolicyId, scanPriority)
+//def scanSettingsFileId = wieClient.uploadFile("wisettings.xml", new File("C:\\Temp\\wisettings.xml"), wieClient.SCAN_SETTINGS_XML)
+//println "Uploaded wiSettings as id: ${scanSettingsFileId}"
+//String scanId = wieClient.createScanFromSettingsFile("Test Scan from Settings File", scanSiteId, scanSensorId, scanSettingsFileId, scanPolicyId, scanPriority)
 println "Scan id is ${scanId}"
 String scanStatus = wieClient.scanStatus(scanId)
 while (scanStatus.equals("Pending") || scanStatus.equals("Starting") || scanStatus.equals("Running") || scanStatus.equals("Importing")) {
@@ -50,8 +52,8 @@ while (scanStatus.equals("Pending") || scanStatus.equals("Starting") || scanStat
     sleep(10000)
     scanStatus = wieClient.scanStatus(scanId)
 }
-def scanResults = wieClient.scanResults(scanId)?.data
-println "Scan ${scanId} results: ${scanResults?.scanStateText}"
+def scanResults = wieClient.scanResultsJson(scanId)?.data
+println "Scan is: ${scanResults?.scanStateText}"
 
 def sb = new StringBuilder()
 sb << """

@@ -9,6 +9,8 @@ This plugin is a work in progress but it is intended to provide the following st
 * [x] **Create Scan from Template** - Create a new simple scan from a template
 * [x] **Create Scan from Settings File** - Create a new simple scan from an uploaded settings file
 
+Note: this plugin is deisgned to be used when WebInspect Enterprise has been integrated with Software Security
+Center
 ### Installing the plugin
  
 Download the latest version from the _release_ directory and install into Deployment Automation from the 
