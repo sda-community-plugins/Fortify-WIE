@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1">
+    <header>
+        <identifier version="1" id="com.serena.air.plugin.MicroFocus-MC"
+                    name="Micro Focus Mobile Center"/>
+        <description>
+            The Micro Focus Mobile Center (MC) plugin allows you to upload and install mobile applications
+            to Mobile Center as part of a workflow.
+        </description>
+        <tag>Automation/Micro Focus/Mobile Center</tag>
+    </header>
+
+    <!-- ==================================== -->
+    <!-- Get a list of devices                -->
+    <!-- ==================================== -->
+    <step-type name="Get Devices">
+        <description>Get a list of one or more devices based on platform, api, availability and so on.</description>
+        <properties>
+            <property name="deviceNameFilter">
+                <property-ui type="textBox"
+                             label="Device Name Filter"
+                             description="Text string used to filter devices by name."/>
+            </property>
+            <property name="platformNameFilter">
+                <property-ui type="selectBox" label="Platform Name"
+                             description="The platform of the devices."/>
+                <value label="Android">ANDROID</value>
+                <value label="iOS">APPLE</value>
+            </property>
+            <property name="platformVersionFIlter">
+                <property-ui type="textBox" label="Platform Version"
+                             description="The platform version of the devices."/>
+            </property>
+            <property name="connectedFilter">
+                <property-ui type="checkBox" label="Connected" default-value="true"
+                             description="Select to only get connected devices."/>
+            </property>
+            <property name="reservedForMeFilter">
+                <property-ui type="checkBox" label="Reserved For Me"
+                             description="If the devices are reserved make sure it is reserved for the current user."/>
+            </property>
+            <property name="serverUrl" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.serverUrl}" label="MC Server URL"
+                             description="The Mobile Center server URL, e.g. https://server:80."/>
+            </property>
+            <property name="username" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.username}" label="MC Username"
+                             description="The username to connect to the Mobile Center server."/>
+            </property>
+            <property name="password" required="true">
+                <property-ui type="secureBox" default-value="${p:system/mc.password}" label="MC Password"
+                             description="The password to connect to the Mobile Center server."/>
+            </property>
+            <property name="useProxy">
+                <property-ui type="checkBox" label="Use Proxy"
+                             description="Connect to Mobile Center through a proxy server."/>
+            </property>
+            <property name="proxyUrl">
+                <property-ui type="textBox" label="Proxy Server"
+                             description="The URL of the Proxy Server to connect to, e.g. https://proxy:8080."/>
+            </property>
+            <property name="tenantId">
+                <property-ui type="textBox" hidden="true" label="Tenant Id"
+                             description="The Mobile Center server Tenant Id."/>
+            </property>
+            <property name="debugMode">
+                <property-ui type="checkBox" label="Debug Output" hidden="true"
+                             description="Select this option to display debug output during execution."/>
+            </property>
+        </properties>
+        <post-processing><![CDATA[
+            if (properties.get("exitCode") != 0) {
+                properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+            }
+            else {
+                properties.put("Status", "Success");
+            }
+        ]]>
+        </post-processing>
+        <command program="${GROOVY_HOME}/bin/groovy">
+            <arg value="-cp"/>
+            <arg path="classes:lib/*"/>
+            <arg file="get_devices.groovy"/>
+            <arg file="${PLUGIN_INPUT_PROPS}"/>
+            <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+        </command>
+    </step-type>
+
+    <!-- ==================================== -->
+    <!--  Upload Application                  -->
+    <!-- ==================================== -->
+    <step-type name="Upload Application">
+        <description>Upload an application into Mobile Center.</description>
+        <properties>
+            <property name="appPath" required="true">
+                <property-ui type="textBox"
+                             label="Application Path"
+                             description="The path to your application file (e.g .APK file).
+                                Either specify an absolute path (e.g. C:\Temp\mobile\MyApp.apk)
+                                or a path that is relative to your working directory
+                                (e.g. MyApp.apk)."/>
+            </property>
+            <property name="appType">
+                <property-ui type="selectBox" label="Application Type"
+                             description="The type of application being uploaded."/>
+                <value label="APK">ANDROID</value>
+                <value label="IPA">APPLE</value>
+            </property>
+            <property name="workspaceId" >
+                <property-ui type="textBox" default-value="${p:component/mc.workspaceId}" label="MC Server Workspace Id"
+                             description="The Mobile Center server workspace id, you can find this by navigating to
+                                the workspace in Mobile Center Server and looking at the value after
+                                'workspace-id' in the URL."/>
+            </property>
+            <property name="serverUrl" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.serverUrl}" label="MC Server URL"
+                             description="The Mobile Center server URL, e.g. https://server:80."/>
+            </property>
+            <property name="username" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.username}" label="MC Username"
+                             description="The username to connect to the Mobile Center server."/>
+            </property>
+            <property name="password" required="true">
+                <property-ui type="secureBox" default-value="${p:system/mc.password}" label="Mobile Center Password"
+                             description="The password to connect to the Mobile Center server."/>
+            </property>
+            <property name="useProxy">
+                <property-ui type="checkBox" label="Use Proxy"
+                             description="Connect to Mobile Center through a proxy server."/>
+            </property>
+            <property name="proxyUrl">
+                <property-ui type="textBox" label="Proxy Server"
+                             description="The URL of the Proxy Server to connect to, e.g. https://proxy:8080."/>
+            </property>
+            <property name="debugMode">
+                <property-ui type="checkBox" label="Debug Output" hidden="true"
+                             description="Select this option to display debug output during execution."/>
+            </property>
+            <property name="tenantId">
+                <property-ui type="textBox" hidden="true" label="Tenant Id"
+                             description="The Mobile Center server Tenant Id."/>
+            </property>
+        </properties>
+        <post-processing><![CDATA[
+            if (properties.get("exitCode") != 0) {
+                properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+            }
+            else {
+                properties.put("Status", "Success");
+            }
+        ]]>
+        </post-processing>
+        <command program="${GROOVY_HOME}/bin/groovy">
+            <arg value="-cp"/>
+            <arg path="classes:lib/*"/>
+            <arg file="upload_app.groovy"/>
+            <arg file="${PLUGIN_INPUT_PROPS}"/>
+            <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+        </command>
+    </step-type>
+
+    <!-- ==================================== -->
+    <!--  Install Application                 -->
+    <!-- ==================================== -->
+    <step-type name="Install Application">
+        <description>Install an application onto one or more device.s</description>
+        <properties>
+            <property name="appId" required="true">
+                <property-ui type="textBox"
+                             label="Application Id" default-value="${p:Upload Application/appId}"
+                             description="The unique id of the application to install."/>
+            </property>
+            <property name="deviceIds">
+                <property-ui type="textBox"
+                             label="Device Id" default-value="${p:Get Devices/deviceIds}"
+                             description="A list of unique id of the device to install on to."/>
+            </property>
+            <property name="instrumented">
+                <property-ui type="checkBox" label="Instrumented"
+                             description="Check if the application has been instrumented."/>
+            </property>
+            <property name="reserveDevice">
+                <property-ui type="checkBox" label="Reserve Device"
+                             description="Reserve the devices for installation and testing for a period of time"/>
+            </property>
+            <property name="reservationTime">
+                <property-ui type="textBox" default-value="30" label="Reservation Time"
+                             description="The time (in minutes) to reserve for. The default is 30 minutes"/>
+            </property>
+            <property name="serverUrl" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.serverUrl}" label="MC Server URL"
+                             description="The Mobile Center server URL, e.g. https://server:80."/>
+            </property>
+            <property name="username" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.username}" label="MC Username"
+                             description="The username to connect to the Mobile Center server."/>
+            </property>
+            <property name="password" required="true">
+                <property-ui type="secureBox" default-value="${p:system/mc.password}" label="MC Password"
+                             description="The password to connect to the Mobile Center server."/>
+            </property>
+            <property name="useProxy">
+                <property-ui type="checkBox" label="Use Proxy"
+                             description="Connect to Mobile Center through a proxy server."/>
+            </property>
+            <property name="proxyUrl">
+                <property-ui type="textBox" label="Proxy Server"
+                             description="The URL of the Proxy Server to connect to, e.g. https://proxy:8080."/>
+            </property>
+            <property name="debugMode">
+                <property-ui type="checkBox" label="Debug Output" hidden="true"
+                             description="Select this option to display debug output during execution."/>
+            </property>
+            <property name="tenantId">
+                <property-ui type="textBox" hidden="true" label="Tenant Id"
+                             description="The Mobile Center server Tenant Id."/>
+            </property>
+            <property name="jobId">
+                <property-ui type="textBox" hidden="true" label="Job Id"
+                             description="The id of the job to use."/>
+            </property>
+        </properties>
+        <post-processing><![CDATA[
+            if (properties.get("exitCode") != 0) {
+                properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+            }
+            else {
+                properties.put("Status", "Success");
+            }
+        ]]>
+        </post-processing>
+        <command program="${GROOVY_HOME}/bin/groovy">
+            <arg value="-cp"/>
+            <arg path="classes:lib/*"/>
+            <arg file="install_app.groovy"/>
+            <arg file="${PLUGIN_INPUT_PROPS}"/>
+            <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+        </command>
+    </step-type>
+
+    <!-- ==================================== -->
+    <!--  Uninstall Application               -->
+    <!-- ==================================== -->
+    <step-type name="Uninstall Application">
+        <description>Uninstall an application from one or more devices.</description>
+        <properties>
+            <property name="appId" required="true">
+                <property-ui type="textBox"
+                             label="Application Id" default-value="${p:Upload Application/appId}"
+                             description="The unique id of the application to install."/>
+            </property>
+            <property name="deviceIds">
+                <property-ui type="textBox"
+                             label="Device Id" default-value="${p:Get Devices/deviceIds}"
+                             description="A list of unique id of the device to install on to."/>
+            </property>
+            <property name="serverUrl" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.serverUrl}" label="MC Server URL"
+                             description="The Mobile Center server URL, e.g. https://server:80."/>
+            </property>
+            <property name="username" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.username}" label="MC Username"
+                             description="The username to connect to the Mobile Center server."/>
+            </property>
+            <property name="password" required="true">
+                <property-ui type="secureBox" default-value="${p:system/mc.password}" label="Mobile Center Password"
+                             description="The password to connect to the Mobile Center server."/>
+            </property>
+            <property name="useProxy">
+                <property-ui type="checkBox" label="Use Proxy"
+                             description="Connect to Mobile Center through a proxy server."/>
+            </property>
+            <property name="proxyUrl">
+                <property-ui type="textBox" label="Proxy Server"
+                             description="The URL of the Proxy Server to connect to, e.g. https://proxy:8080."/>
+            </property>
+            <property name="debugMode">
+                <property-ui type="checkBox" label="Debug Output" hidden="true"
+                             description="Select this option to display debug output during execution."/>
+            </property>
+            <property name="tenantId">
+                <property-ui type="textBox" hidden="true" label="Tenant Id"
+                             description="The Mobile Center server Tenant Id."/>
+            </property>
+            <property name="jobId">
+                <property-ui type="textBox" hidden="true" label="Job Id"
+                             description="The id of the job to use."/>
+            </property>
+        </properties>
+        <post-processing><![CDATA[
+            if (properties.get("exitCode") != 0) {
+                properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+            }
+            else {
+                properties.put("Status", "Success");
+            }
+        ]]>
+        </post-processing>
+        <command program="${GROOVY_HOME}/bin/groovy">
+            <arg value="-cp"/>
+            <arg path="classes:lib/*"/>
+            <arg file="uninstall_app.groovy"/>
+            <arg file="${PLUGIN_INPUT_PROPS}"/>
+            <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+        </command>
+    </step-type>
+
+    <!-- ==================================== -->
+    <!-- Get the status of a specific device  -->
+    <!-- ==================================== -->
+    <step-type name="Get Device Status">
+        <description>Get the status of a device and set properties for "connected" and "reserved".</description>
+        <properties>
+            <property name="deviceId">
+                <property-ui type="textBox"
+                             label="Device Id" default-value="${p:environment/mc.deviceId}"
+                             description="The unique id of the device to get the status for."/>
+            </property>
+            <property name="serverUrl" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.serverUrl}" label="MC Server URL"
+                             description="The Mobile Center server URL, e.g. https://server:80."/>
+            </property>
+            <property name="username" required="true">
+                <property-ui type="textBox" default-value="${p:system/mc.username}" label="MC Username"
+                             description="The username to connect to the Mobile Center server."/>
+            </property>
+            <property name="password" required="true">
+                <property-ui type="secureBox" default-value="${p:system/mc.password}" label="MC Password"
+                             description="The password to connect to the Mobile Center server."/>
+            </property>
+            <property name="useProxy">
+                <property-ui type="checkBox" label="Use Proxy"
+                             description="Connect to Mobile Center through a proxy server."/>
+            </property>
+            <property name="proxyUrl">
+                <property-ui type="textBox" label="Proxy Server"
+                             description="The URL of the Proxy Server to connect to, e.g. https://proxy:8080."/>
+            </property>
+            <property name="debugMode">
+                <property-ui type="checkBox" label="Debug Output" hidden="true"
+                             description="Select this option to display debug output during execution."/>
+            </property>
+            <property name="tenantId">
+                <property-ui type="textBox" hidden="true" label="Tenant Id"
+                             description="The Mobile Center server Tenant Id."/>
+            </property>
+        </properties>
+        <post-processing><![CDATA[
+            if (properties.get("exitCode") != 0) {
+                properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+            }
+            else {
+                properties.put("Status", "Success");
+            }
+        ]]>
+        </post-processing>
+        <command program="${GROOVY_HOME}/bin/groovy">
+            <arg value="-cp"/>
+            <arg path="classes:lib/*"/>
+            <arg file="get_device_status.groovy"/>
+            <arg file="${PLUGIN_INPUT_PROPS}"/>
+            <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+        </command>
+    </step-type>
+
+</plugin>

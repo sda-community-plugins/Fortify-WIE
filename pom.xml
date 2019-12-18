@@ -1,0 +1,145 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.serena</groupId>
+        <artifactId>air-plugin-build-parent</artifactId>
+        <version>CURRENT</version>
+        <relativePath>../air-plugin-build-script/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>Fortify-WIE</artifactId>
+    <packaging>pom</packaging>
+    <name>Fortify-WIE</name>
+    <description>A plugin for integrating with Micro Focus WebInspect Enterprise (WIE)</description>
+    <version>1.0</version>
+
+    <properties>
+        <air.plugin.build.parent.absolute.path>${basedir}/../air-plugin-build-parent</air.plugin.build.parent.absolute.path>
+        <!-- this is the minimum version of DA your plugin is "supported" on -->
+        <mininum.server.version.needed>6.2</mininum.server.version.needed>
+        <!-- change this when you create a new version of your plugin -->
+        <plugin.major.version>1</plugin.major.version>
+        <plugin.build.version>SNAPSHOT</plugin.build.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>local-repository</id>
+            <url>file://../mavenBuildConfig/repo</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- If you set scope to "runtime" the dependencies will be copied into your plugins's zip file. -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.2</version>
+        </dependency>
+
+        <!-- These dependencies are required for the Serena helper classes and build process. -->
+        <dependency>
+            <groupId>com.serena</groupId>
+            <artifactId>air-plugin-ant-tasks</artifactId>
+            <version>CURRENT</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.serena</groupId>
+            <artifactId>plugins-commons</artifactId>
+            <version>CURRENT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.serena</groupId>
+            <artifactId>plugins-commons</artifactId>
+            <version>CURRENT</version>
+            <classifier>sources</classifier>
+            <type>zip</type>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+
+                        <configuration>
+                            <includeScope>compile</includeScope>
+                            <includeScope>runtime</includeScope>
+                            <excludeScope>test</excludeScope>
+                            <excludeTransitive>false</excludeTransitive>
+                            <includeTypes>jar</includeTypes>
+                            <excludeArtifactIds>plugins,groovy-all,junit</excludeArtifactIds>
+                            <useSubDirectoryPerScope>false</useSubDirectoryPerScope>
+                            <outputDirectory>${dependency.dir}\runtime</outputDirectory>
+                            <stripVersion>false</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
