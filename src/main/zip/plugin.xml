@@ -25,7 +25,7 @@
                              description="The URL to scan."/>
             </property>
             <property name="appName" required="true">
-                <property-ui type="textBox" label="SSC Application Name"
+                <property-ui type="textBox" label="SSC Application Name" default-value="${p:application.name}"
                              description="The name of the related application in Software Security Center."/>
             </property>
             <property name="appVerName" required="true">
@@ -101,7 +101,7 @@
                              description="The UUID of the template to use, can be found in the WebConsole."/>
             </property>
             <property name="appName" required="true">
-                <property-ui type="textBox" label="SSC Application Name"
+                <property-ui type="textBox" label="SSC Application Name" default-value="${p:application.name}"
                              description="The name of the related application in Software Security Center."/>
             </property>
             <property name="appVerName" required="true">
@@ -177,7 +177,7 @@
                              description="The filename of the settings file to use, relative to the working directory."/>
             </property>
             <property name="appName" required="true">
-                <property-ui type="textBox" label="SSC Application Name"
+                <property-ui type="textBox" label="SSC Application Name" default-value="${p:application.name}"
                              description="The name of the related application in Software Security Center."/>
             </property>
             <property name="appVerName" required="true">
