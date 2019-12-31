@@ -1,6 +1,6 @@
 # Micro Focus Fortify WebInspect Enterprise plugin
 
-The _Micro Focus Fortify WebInspect Enteprise_ plugin allows you to execute dynamic application security 
+The _Micro Focus Fortify WebInspect Enterprise_ plugin allows you to execute dynamic application security 
 testing as part of a Deployment Automation workflow.
 
 This plugin is a work in progress but it is intended to provide the following steps:
@@ -13,7 +13,7 @@ This plugin is a work in progress but it is intended to provide the following st
 
 Note: this plugin is designed to be used when [WebInspect Enterprise](https://www.microfocus.com/en-us/products/webinspect-dynamic-analysis-dast/overview) 
 has been integrated with [Software Security Center](https://www.microfocus.com/en-us/products/software-security-assurance-sdlc/overview).
- It is recommended that a specific user is created in for executing the integration.
+ It is recommended that a specific user is created for executing the integration.
  
 ### Installing the plugin
  
