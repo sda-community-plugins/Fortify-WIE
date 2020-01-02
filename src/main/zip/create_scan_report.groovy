@@ -118,7 +118,7 @@ try {
     sb << "<tr> <td> Scan Type </td> <td> ${scanResults?.settingsDetail?.scanType} </td> </tr>"
     sb << "<tr> <td> Sensor </td> <td> ${scanResults?.sensor?.name} </td> </tr>"
     sb << "<tr> <td> Aplication </td> <td> ${scanResults?.project?.name} ${scanResults?.projectVersion?.name} </td> </tr>"
-    sb << "<tr> <td> Priority </td> <td> ${scanResults?.sensor?.name} </td> </tr>"
+    sb << "<tr> <td> Priority </td> <td> ${scanResults?.priority} </td> </tr>"
     sb << "<tr> <td> Scan Start Time </td> <td> ${scanResults?.scanStartTime} </td> </tr>"
     sb << "<tr> <td> Scan End Time </td> <td> ${scanResults?.scanEndTime} </td> </tr>"
     sb << "<tr> <td> Status </td> <td> <span class=" + (("Complete".equalsIgnoreCase(scanResults?.scanStateText)) ? "success >" : "failed >") +  scanResults?.scanStateText + "</td> </tr>"
