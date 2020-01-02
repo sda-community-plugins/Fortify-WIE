@@ -1,6 +1,6 @@
-# Micro Focus Fortify WebInspect Enterprise plugin
+# Fortify WebInspect Enterprise plugin
 
-The _Micro Focus Fortify WebInspect Enterprise_ plugin allows you to execute dynamic application security 
+The _Fortify WebInspect Enterprise_ plugin allows you to execute dynamic application security 
 testing as part of a Deployment Automation workflow.
 
 This plugin is a work in progress but it is intended to provide the following steps:
@@ -9,11 +9,11 @@ This plugin is a work in progress but it is intended to provide the following st
 * [x] **Create Scan from Template** - Create a new simple scan from a template
 * [x] **Create Scan from Settings File** - Create a new simple scan from an uploaded settings file
 * [x] **Get Scan Status** - Gets the status of a previously initiated scan
-* [x] **Create Scan Report** - Create a HTML report of a previously initiated scan.  
+* [x] **Create Scan Report** - Create a HTML report of a previously initiated scan  
 
 Note: this plugin is designed to be used when [WebInspect Enterprise](https://www.microfocus.com/en-us/products/webinspect-dynamic-analysis-dast/overview) 
 has been integrated with [Software Security Center](https://www.microfocus.com/en-us/products/software-security-assurance-sdlc/overview).
- It is recommended that a specific user is created for executing the integration.
+It is recommended that a specific Software Security Center (e.g. da_service_user) user is created for executing the integration.
  
 ### Installing the plugin
  
@@ -25,9 +25,9 @@ Download the latest version from the _release_ directory and install into Deploy
 The plugin provides three ways/steps to execute a scan. For each you can provide the name of the Application,
 Application Version and Security Policy to use. The plugin will attempt to validate each of these.
 For the **Create Scan from URL** step you simply need to provide the URL of the running application to scan. For
-the **Create Scan from Template** step you need to have created a Scan Template in the WebInspect Enterprise Web Console and
-know its Id (this will be present in the browsers URL field when you navigate to it). For the
-**Create Scan from Settings File** step you need to have downloaded an XML Scan Settings file and (preferably) stored it
+the **Create Scan from Template** step you need to have created a *Scan Template* in the WebInspect Enterprise Web Console and
+know its *Id* (this will be present in the browsers URL field when you navigate to it). For the
+**Create Scan from Settings File** step you need to have downloaded an XML *Scan Settings* file and (preferably) stored it
 as a file in a [Component Version](http://help.serena.com/doc_center/sra/ver6_3/sda_help/ConcCompVer.html) in Deployment Automation.
                   
 You will also need to create three Deployment Automation 
