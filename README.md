@@ -13,7 +13,6 @@ This plugin is a work in progress but it is intended to provide the following st
 
 Note: this plugin is designed to be used when [WebInspect Enterprise](https://www.microfocus.com/en-us/products/webinspect-dynamic-analysis-dast/overview) 
 has been integrated with [Software Security Center](https://www.microfocus.com/en-us/products/software-security-assurance-sdlc/overview).
-It is recommended that a specific Software Security Center (e.g. da_service_user) user is created for executing the integration.
  
 ### Installing the plugin
  
@@ -29,7 +28,9 @@ the **Create Scan from Template** step you need to have created a *Scan Template
 know its *Id* (this will be present in the browsers URL field when you navigate to it). For the
 **Create Scan from Settings File** step you need to have downloaded an XML *Scan Settings* file and (preferably) stored it
 as a file in a [Component Version](http://help.serena.com/doc_center/sra/ver6_3/sda_help/ConcCompVer.html) in Deployment Automation.
-                  
+
+It is recommended that a specific Software Security Center (e.g. da_service) user is created for executing the integration. This user will need to be assigned to a Role in the WebInspect Enterprise Console that allows Scans to be executed via the REST API.
+
 You will also need to create three Deployment Automation 
 [System Properties](http://help.serena.com/doc_center/sra/ver6_3/sda_help/sra_adm_sys_properties.html)
 called `wie.serverUrl` that refers to your WebInspect Enterprise URL (e.g. "https://server-name/WIE") and also
