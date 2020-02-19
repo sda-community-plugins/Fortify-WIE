@@ -1,6 +1,7 @@
 package test.com.serena.air.plugin.wie
 
 import com.serena.air.plugin.wie.WIEHelper
+import com.serena.air.plugin.wie.WIEExportType
 
 def wieServerUrl = System.getenv("WIE_SERVER_URL")
 def wieUser = System.getenv("WIE_USERNAME")
@@ -11,8 +12,8 @@ wieClient.setSSL()
 wieClient.setDebug(true)
 wieClient.login()
 
-println wieClient.scanResultsJson("3e86abf4-a9cd-4e58-9349-0f900d113588")
-System.exit(0)
+//println wieClient.scanResultsJson("3e86abf4-a9cd-4e58-9349-0f900d113588")
+//wieClient.exportScanResults("faf0a244-936e-4226-98d8-3d1f35ff6632", WIEExportType.FPR, "C:\\Temp", "test.fpr")
 //println wieClient.getStatusJson()
 //println wieClient.getSecurityGroupsJson()
 //println wieClient.getSecurityGroupByIdJson("8dc3fa89-9be0-4a8c-98d7-e88c836a17b5")

@@ -21,7 +21,7 @@
         <!-- this is the minimum version of DA your plugin is "supported" on -->
         <mininum.server.version.needed>6.2</mininum.server.version.needed>
         <!-- change this when you create a new version of your plugin -->
-        <plugin.major.version>1</plugin.major.version>
+        <plugin.major.version>2</plugin.major.version>
         <plugin.build.version>SNAPSHOT</plugin.build.version>
     </properties>
 

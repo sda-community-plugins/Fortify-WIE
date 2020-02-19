@@ -6,6 +6,9 @@ package com.serena.air.plugin.wie
 import com.serena.air.StepFailedException
 import com.serena.air.http.HttpBaseClient
 import com.serena.air.http.HttpResponse
+import java.io.File
+import java.io.InputStream
+import java.io.FileOutputStream
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.json.JsonBuilder
@@ -17,10 +20,12 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpPut
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.HttpStatus
+import org.apache.http.client.methods.CloseableHttpResponse
 import org.apache.http.conn.HttpHostConnectException
 import org.apache.http.entity.ContentType
 import org.apache.http.entity.StringEntity
 import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger
 
 import java.nio.charset.StandardCharsets
@@ -51,7 +56,7 @@ class WIEHelper extends HttpBaseClient {
 
     @Override
     protected String getFullServerUrl(String serverUrl) {
-         return serverUrl + "/REST"
+        return serverUrl + "/REST"
     }
 
     /**
@@ -78,6 +83,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get status of WIE as parseable JSON response
      */
+
     def getStatusJson() {
         HttpResponse response = execGet("/api/v1/status", null)
         checkStatusCode(response.code)
@@ -92,6 +98,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get all WIE security groups as parseable JSON response
      */
+
     def getSecurityGroupsJson() {
         HttpResponse response = execGet("/api/v1/securityGroups", null)
         checkStatusCode(response.code)
@@ -104,6 +111,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific WIE security group as parseable JSON response
      */
+
     def getSecurityGroupByIdJson(String groupId) {
         HttpResponse response = execGet("/api/v1/securityGroups/${groupId}", null)
         checkStatusCode(response.code)
@@ -116,13 +124,18 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific security group (by name) as parseable JSON response
      */
+
     def getSecurityGroupByNameJson(String groupName) {
         def group = null
         def groupsJson = this.getSecurityGroupsJson()
         groupsJson?.data.each {
-            if (new String(it?.name).equals(groupName)) { group = it }
+            if (new String(it?.name).equals(groupName)) {
+                group = it
+            }
         }
-        if (group) { return group } else {
+        if (group) {
+            return group
+        } else {
             throw new StepFailedException("Could not find security group \"${groupName}\"")
         }
     }
@@ -132,6 +145,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get all WIE policies as parseable JSON response
      */
+
     def getPoliciesJson() {
         HttpResponse response = execGet("/api/v1/policies", null)
         checkStatusCode(response.code)
@@ -144,6 +158,7 @@ class WIEHelper extends HttpBaseClient {
     /*
     * Get a specific WIE policy as parseable JSON response
     */
+
     def getPolicyByIdJson(String policyId) {
         HttpResponse response = execGet("/api/v1/policies/${policyId}", null)
         checkStatusCode(response.code)
@@ -156,13 +171,18 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific policy (by name) as parseable JSON response
      */
+
     def getPolicyByNameJson(String policyName) {
         def policy = null
         def policiesJson = this.getPoliciesJson()
         policiesJson?.data.each {
-            if (new String(it?.name).equals(policyName)) { policy = it }
+            if (new String(it?.name).equals(policyName)) {
+                policy = it
+            }
         }
-        if (policy) { return policy } else {
+        if (policy) {
+            return policy
+        } else {
             throw new StepFailedException("Could not find policy \"${policyName}\"")
         }
     }
@@ -170,11 +190,14 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific policy id (by name)
      */
+
     def getPolicyIdByName(String policyName) {
         def policy = null
         def policiesJson = this.getPoliciesJson()
         policiesJson?.data.each {
-            if (new String(it?.name).equals(policyName)) { policy = it }
+            if (new String(it?.name).equals(policyName)) {
+                policy = it
+            }
         }
         if (policy) {
             return policy?.id
@@ -188,6 +211,7 @@ class WIEHelper extends HttpBaseClient {
     /*
     * Get all WIE projects (applications) as parseable JSON response
     */
+
     def getProjectsJson() {
         HttpResponse response = execGet("/api/v1/projects", null)
         checkStatusCode(response.code)
@@ -200,6 +224,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific WIE project as parseable JSON response
      */
+
     def getProjectByIdJson(String projectId) {
         HttpResponse response = execGet("/api/v1/projects/${projectId}", null)
         checkStatusCode(response.code)
@@ -212,13 +237,18 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific project (by name) as parseable JSON response
      */
+
     def getProjectByNameJson(String projectName) {
         def project = null
         def projectsJson = this.getProjectsJson()
         projectsJson?.data.each {
-            if (new String(it?.name).equals(projectName)) { project = it }
+            if (new String(it?.name).equals(projectName)) {
+                project = it
+            }
         }
-        if (project) { return project } else {
+        if (project) {
+            return project
+        } else {
             throw new StepFailedException("Could not find project \"${projectName}\"")
         }
     }
@@ -228,6 +258,7 @@ class WIEHelper extends HttpBaseClient {
     /*
     * Get all WIE project (application) versions as parseable JSON response
     */
+
     def getProjectVersionsJson() {
         HttpResponse response = execGet("/api/v2/projectVersions", null)
         checkStatusCode(response.code)
@@ -240,6 +271,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific WIE project version as parseable JSON response
      */
+
     def getProjectVersionByIdJson(String projectVersionId) {
         HttpResponse response = execGet("/api/v2/projectVersions/${projectVersionId}", null)
         checkStatusCode(response.code)
@@ -252,13 +284,18 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific project (by name) as parseable JSON response
      */
+
     def getProjectVersionByNameJson(String projectVersionName) {
         def projectVersion = null
         def projectVersionsJson = this.getProjectVersionsJson()
         projectVersionsJson?.data.each {
-            if (new String(it?.name).equals(projectVersionName)) { projectVersion = it }
+            if (new String(it?.name).equals(projectVersionName)) {
+                projectVersion = it
+            }
         }
-        if (projectVersion) { return projectVersion } else {
+        if (projectVersion) {
+            return projectVersion
+        } else {
             throw new StepFailedException("Could not find project version \"${projectVersionName}\"")
         }
     }
@@ -266,6 +303,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific project version (by project and name) as parseable JSON response
     */
+
     def getProjectVersionByProjectAndNameJson(String projectName, String projectVersionName) {
         def projectVersion = null
         def projectVersionsJson = this.getProjectVersionsJson()
@@ -276,7 +314,9 @@ class WIEHelper extends HttpBaseClient {
                 }
             }
         }
-        if (projectVersion) { return projectVersion } else {
+        if (projectVersion) {
+            return projectVersion
+        } else {
             throw new StepFailedException("Could not find project version \"${projectVersionName}\" in project \"${projectName}\"")
         }
     }
@@ -284,6 +324,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific project version site id (by project and name)
      */
+
     def getProjectVersionSiteId(String projectName, String projectVersionName) {
         def projectVersion = null
         def projectVersionsJson = this.getProjectVersionsJson()
@@ -306,6 +347,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get all WIE scan templates as parseable JSON response
      */
+
     def getScanTemplatesJson() {
         HttpResponse response = execGet("/api/v2/scanTemplates", null)
         checkStatusCode(response.code)
@@ -318,6 +360,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific WIE scan template as parseable JSON response
      */
+
     def getScanTemplateByIdJson(String templateId) {
         HttpResponse response = execGet("/api/v2/scanTemplates/${templateId}", null)
         checkStatusCode(response.code)
@@ -330,6 +373,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get the name of a WIE scan template by its id
      */
+
     def getScanTemplateNameById(String templateId) {
         HttpResponse response = execGet("/api/v2/scanTemplates/${templateId}", null)
         checkStatusCode(response.code)
@@ -350,6 +394,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get all WIE sensors as parseable JSON response
      */
+
     def getSensorsJson() {
         HttpResponse response = execGet("/api/v1/sensors", null)
         checkStatusCode(response.code)
@@ -362,6 +407,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific WIE sensor as parseable JSON response
      */
+
     def getSensorByIdJson(String sensorId) {
         HttpResponse response = execGet("/api/v1/sensors/${sensorId}", null)
         checkStatusCode(response.code)
@@ -374,13 +420,18 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific sensor (by name) as parseable JSON response
      */
+
     def getSensorByNameJson(String sensorName) {
         def sensor = null
         def sensorsJson = this.getSensorsJson()
         sensorsJson?.data.each {
-            if (new String(it?.name).equals(sensorName)) { sensor = it }
+            if (new String(it?.name).equals(sensorName)) {
+                sensor = it
+            }
         }
-        if (sensor) { return sensor } else {
+        if (sensor) {
+            return sensor
+        } else {
             throw new StepFailedException("Could not find sensor \"${sensorName}\"")
         }
     }
@@ -388,11 +439,14 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get a specific sensor id (by name)
      */
+
     def getSensorIdByName(String sensorName) {
         def sensor = null
         def sensorsJson = this.getSensorsJson()
         sensorsJson?.data.each {
-            if (new String(it?.name).equals(sensorName)) { sensor = it }
+            if (new String(it?.name).equals(sensorName)) {
+                sensor = it
+            }
         }
         if (sensor) {
             return sensor?.id
@@ -406,6 +460,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Create a new simple scan from a URL
      */
+
     def createScanFromUrl(String scanName, String scanSiteId, String scanPolicyId, String scanSensorId, String scanUrl, int scanPriority) {
         def url = "/api/v2/scans"
 
@@ -451,6 +506,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Create a new simple scan from a template
      */
+
     def createScanFromTemplate(String scanName, String scanSiteId, String scanPolicyId, String scanSensorId, String scanTemplId, int scanPriority) {
         def url = "/api/v2/scans"
 
@@ -483,13 +539,14 @@ class WIEHelper extends HttpBaseClient {
         if (scanId == null || scanId.length() == 0) {
             throw new StepFailedException("Could not retrieve scan id")
         }
-        return scanId.replaceAll("\\[", "").replaceAll("\\]","");
+        return scanId.replaceAll("\\[", "").replaceAll("\\]", "");
 
     }
 
     /*
      * Create a new simple scan from an uploaded settings file
      */
+
     def createScanFromSettingsFile(String scanName, String scanSiteId, String scanPolicyId, String scanSensorId, String scanSettingsFileId, int scanPriority) {
         def url = "/api/v2/scans"
 
@@ -522,12 +579,13 @@ class WIEHelper extends HttpBaseClient {
         if (scanId == null || scanId.length() == 0) {
             throw new StepFailedException("Could not retrieve scan id")
         }
-        return scanId.replaceAll("\\[", "").replaceAll("\\]","");
+        return scanId.replaceAll("\\[", "").replaceAll("\\]", "");
     }
 
     /*
      * Get the status of a scan
      */
+
     def scanStatus(String scanId) {
         def url = "/api/v2/scans/${scanId}"
         HttpResponse response = execGet(url, null)
@@ -547,6 +605,7 @@ class WIEHelper extends HttpBaseClient {
     /*
      * Get the results of a completed scan as parseable JSON response
      */
+
     def scanResultsJson(String scanId) {
         def url = "/api/v2/scans/${scanId}"
 
@@ -560,6 +619,49 @@ class WIEHelper extends HttpBaseClient {
         return json
     }
 
+    /**
+     * Export the results of a completed scan to a file
+     * @param scanId id of the scan in WebInpsect Enterprise
+     * @param theFile the
+     * @param theType
+     * @return
+     */
+    def exportScanResults(String scanId, WIEExportType exportType, String dir, String filename) {
+        def url = "/api/v2/scans/${scanId}/export"
+        List<NameValuePair> params = new ArrayList<NameValuePair>()
+        params.add(new BasicNameValuePair("type", (exportType as String)));
+
+        URIBuilder builder = getUriBuilder(url.toString())
+        debug("WIE GET: ${url}")
+        if (params) {
+            debug("PARAMETERS: " + params.toString())
+            builder.addParameters(params)
+        }
+        HttpGet method = new HttpGet(builder.build())
+        method.addHeader(HttpHeaders.AUTHORIZATION, fortifyToken)
+
+        CloseableHttpResponse apacheHttpResponse = getHttpclient().execute(getHost(), method)
+        HttpEntity entity = apacheHttpResponse.getEntity();
+        if (entity != null && apacheHttpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            File outputfile = new File(dir, filename)
+            debug("Downloading Scan results in " + (exportType as String) + " format to: " + outputfile.toString())
+            long length = entity.getContentLength()
+            InputStream instream = entity.getContent()
+            if (outputfile.exists()) { outputfile.delete() }
+            FileOutputStream outstream = new FileOutputStream(outputfile)
+            try {
+                byte[] buffer = new byte[2048]
+                int count = -1
+                while ((count = instream.read(buffer)) != -1) {
+                    outstream.write(buffer, 0, count)
+                }
+                outstream.flush()
+            } finally {
+                outstream.close()
+            }
+        }
+
+    }
 
     // TempFiles
 

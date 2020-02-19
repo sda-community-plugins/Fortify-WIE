@@ -138,5 +138,11 @@
 
 	  </release-note>
 
+      <release-note plugin-version="2">
+
+              Added step to export a scan from WebInspect Enterprise and save as FPR, Scan or XML.
+
+      </release-note>
+
   </release-notes>
 </pluginInfo>
