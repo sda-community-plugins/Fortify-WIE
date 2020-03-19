@@ -10,6 +10,7 @@ This plugin is a work in progress but it is intended to provide the following st
 * [x] **Create Scan from Settings File** - Create a new simple scan from an uploaded settings file
 * [x] **Get Scan Status** - Gets the status of a previously initiated scan
 * [x] **Create Scan Report** - Create a HTML report of a previously initiated scan  
+* [x] **Export Scan to File** - Export a scan to file as FPR, Scan or XML format
 
 Note: this plugin is designed to be used when [WebInspect Enterprise](https://www.microfocus.com/en-us/products/webinspect-dynamic-analysis-dast/overview) 
 has been integrated with [Software Security Center](https://www.microfocus.com/en-us/products/software-security-assurance-sdlc/overview).
